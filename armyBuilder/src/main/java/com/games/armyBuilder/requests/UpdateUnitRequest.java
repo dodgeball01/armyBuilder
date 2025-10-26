@@ -4,8 +4,8 @@ public class UpdateUnitRequest extends UnitRequest {
 	
 	private String action;
 
-	public UpdateUnitRequest(String name, int model, String action) {
-		super(name, model);
+	public UpdateUnitRequest(String name, int model, String action, int count) {
+		super(name, model, count);
 		this.setAction(action);
 	}
 

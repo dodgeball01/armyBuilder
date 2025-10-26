@@ -24,23 +24,27 @@ public class Army {
 		return units;
 	}
 	
-	public void addUnit(String unitName, int level, int model, List<String> abilities) {
-		Unit unit = new Unit(unitName, level, model, abilities);
+	public void addUnit(String unitName, int level, int model, List<String> abilities, int unitCount) {
+		Unit unit = new Unit(unitName, level, model, abilities, unitCount);
 		this.units.add(unit);
 	}
 	
-	public void removeUnit(String unitName, int model) {
+	public int removeUnit(String unitName, int model) {
 		int unitIndex = -1;
+		int unitCount = 0;
 		
 		for (Unit unit : units) {
 			if (unit.getName().equalsIgnoreCase(unitName) && unit.getModel() == model) {
 				unitIndex = units.indexOf(unit);
+				unitCount = unit.getCount();
 			}	
 		}
 		
 		if (unitIndex > -1) {
 			units.remove(unitIndex);
-		} 
+		}
+		
+		return unitCount;
 	}
 	
 	public void setTotalPoints(int points) {

@@ -7,16 +7,18 @@ public class Unit {
 	private int level;
 	private int model;
 	private List<String> abilities;
+	private int count;
 	
 	public Unit() {
 		
 	}
 	
-	public Unit(String name, int level, int model, List<String> abilities) {
+	public Unit(String name, int level, int model, List<String> abilities, int count) {
 		this.name = name;
 		this.level = level;
 		this.model = model;
 		this.abilities = abilities;
+		this.count = count;
 	}
 	
 	public void setName(String name) {
@@ -49,6 +51,14 @@ public class Unit {
 	
 	public List<String> getAbilities() {
 		return abilities;
+	}
+	
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 
 }

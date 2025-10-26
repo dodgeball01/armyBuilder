@@ -3,10 +3,12 @@ package com.games.armyBuilder.requests;
 public class UnitRequest {
 	private String name;
 	private int model;
+	private int count;
 	
-	public UnitRequest(String name, int model) {
+	public UnitRequest(String name, int model, int count) {
 		this.name = name;
 		this.model = model;
+		this.count = count;
 	}
 	
 	public void setName(String name) {
@@ -23,6 +25,14 @@ public class UnitRequest {
 	
 	public int getModel() {
 		return model;
+	}
+	
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 
 }
