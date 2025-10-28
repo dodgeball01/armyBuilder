@@ -52,7 +52,7 @@ public class Army {
 	}
 	
 	/**
-	 * checks if a unit is contained in the Army Unit List,
+	 * checks if a unit is in the Army Unit List,
 	 * returns an int[2] with int[0] = index of unit and int[1] = current count
 	 * if unit is not in Army Unit List int[0] = -1 and int[1] = 0 
 	 * @param unitName
