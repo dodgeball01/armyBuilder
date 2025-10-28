@@ -47,6 +47,36 @@ public class Army {
 		return unitCount;
 	}
 	
+	public void removeUnit(int indexToRemove) {
+		units.remove(indexToRemove);
+	}
+	
+	/**
+	 * checks if a unit is contained in the Army Unit List,
+	 * returns an int[2] with int[0] = index of unit and int[1] = current count
+	 * if unit is not in Army Unit List int[0] = -1 and int[1] = 0 
+	 * @param unitName
+	 * @param unitModel
+	 * @return
+	 */
+	public int[] getUnitIndexAndCount(String unitName, int unitModel) {
+		int[] unitIndexAndCount = new int[2];
+		int unitIndex = -1; //return -1 if unit not in UnitList
+		int unitCount = 0; //return 0  if unit not in UnitList
+		
+		for (Unit unit : units) {
+			if (unit.getName().equalsIgnoreCase(unitName) && unit.getModel() == unitModel) {
+				unitIndex = units.indexOf(unit);
+				unitCount = unit.getCount();
+			}	
+		}
+		
+		unitIndexAndCount[0] = unitIndex;
+		unitIndexAndCount[1] = unitCount;
+		
+		return unitIndexAndCount;
+	}
+	
 	public void setTotalPoints(int points) {
 		this.totalPoints = points;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.games.armyBuilder.objects.Army;
 import com.games.armyBuilder.objects.KnownWorldArmies.Units;
+import com.games.armyBuilder.objects.Unit;
 import com.games.armyBuilder.requests.ArmyRequest;
 import com.games.armyBuilder.requests.UnitRequest;
 import com.games.armyBuilder.requests.UpdateArmyRequest;
@@ -48,7 +49,6 @@ public class KnownWorldArmyOperations {
 			int cost = costFromUnitAndModel(unitName, unitModel);
 			
 			currentPoints -= (unitCount * cost);
-			//TODO: create exception to throw if currentPoints < 0
 			
 			army.addUnit(unitName, level, unitModel, abilities, unitCount);
 		}
@@ -64,40 +64,43 @@ public class KnownWorldArmyOperations {
 		for (UnitRequest armyUnit : armyUnits) {
 			String unitName = armyUnit.getName();
 			int unitModel = armyUnit.getModel();
-			int unitCount = armyUnit.getCount();
-//			TODO: might move logic to find unit in unitList from army.removeUnit
-//			TODO: add logic to see if unit already exists and then code for adding or updating unitlist
-			if (unitCount == 0) {
-				army = removeUnit(unitName, unitModel, army);
+			int newUnitCount = armyUnit.getCount();
+			
+			int cost = costFromUnitAndModel(unitName, unitModel);
+			
+			int[] unitIndexandCount = army.getUnitIndexAndCount(unitName, unitModel);
+//			if unitIndex is not -1 then unit exists in army unit list
+			int unitIndex = unitIndexandCount[0]; 
+			int oldUnitCount = unitIndexandCount[1];
+			
+			if (unitIndex > -1 && newUnitCount == 0) {
+				army = removeUnit(unitIndex, oldUnitCount, cost, army);
+			} else if (unitIndex > -1 && newUnitCount > 0) {
+				army = updateUnit(unitIndex, newUnitCount, oldUnitCount, cost, army);
 			} else {
-				army = addUnit(unitName, unitModel, army, unitCount);
+				army = addUnit(unitName, unitModel, newUnitCount, cost, army);
 			}
 		}
 		
 		return army;
 	}
 	
-	private Army removeUnit(String unitName, int model, Army army) {
+	private Army removeUnit(int unitIndex, int oldUnitCount, int cost, Army army) {
 		int currentPoints = army.getCurrentPoints();
-		
-		int cost = costFromUnitAndModel(unitName, model);
-		
-		int unitCount = army.removeUnit(unitName, model);
-//		TODO: may have to set something if unit is not found, above unitCount will come back as zero
-		army.setCurrentPoints(currentPoints += (unitCount * cost));
+				
+		army.removeUnit(unitIndex);
+		army.setCurrentPoints(currentPoints += (oldUnitCount * cost));
 		
 		return army;
 	}
 	
-	private Army addUnit(String unitName, int model, Army army, int count) {
+	private Army addUnit(String unitName, int model, int count, int cost, Army army) {
 		int currentPoints = army.getCurrentPoints();
 		
 		int level = levelFromUnitAndModel(unitName, model);
 		List<String> abilities = abilitiesFromUnitAndModel(unitName, model);
-		int cost = costFromUnitAndModel(unitName, model);
 		
 		currentPoints -= (count * cost);
-		//TODO: create exception to throw if currentPoints < 0
 		
 		army.addUnit(unitName, level, model, abilities, count);
 		army.setCurrentPoints(currentPoints);
@@ -105,4 +108,18 @@ public class KnownWorldArmyOperations {
 		return army;
 	}
 	
+	private Army updateUnit(int unitIndex, int newUnitCount, int oldUnitCount, int cost, Army army) {
+		int currentPoints = army.getCurrentPoints();
+		
+		Unit unit = army.getUnits().get(unitIndex);
+		unit.setCount(newUnitCount);
+		army.getUnits().set(unitIndex, unit);
+		
+		int countDifferance = oldUnitCount - newUnitCount;		
+		currentPoints += (countDifferance * cost);
+		
+		army.setCurrentPoints(currentPoints);
+		
+		return army;
+	}
 }
